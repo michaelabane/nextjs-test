@@ -1,7 +1,36 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [loading, setLoading] = useState(false);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const url = "/api/test";
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        cache: "no-store",
+      });
+      if (!res.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await res.json();
+      console.log("Data fetched:", data);
+      return data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -44,6 +73,10 @@ export default function Home() {
           >
             Read our docs
           </a>
+          {loading && <p>Loading</p>}
+          <button className={styles.secondary} onClick={fetchData}>
+            fetch data
+          </button>
         </div>
       </main>
       <footer className={styles.footer}>
