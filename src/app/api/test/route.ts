@@ -1,4 +1,4 @@
-import { after, NextResponse } from "next/server";
+import { after } from "next/server";
 
 export async function GET() {
   console.log("GET /api/test");
@@ -7,5 +7,8 @@ export async function GET() {
     await new Promise((resolve) => setTimeout(resolve, 10000));
   });
 
-  return NextResponse.json({ success: true }, { status: 200 });
+  return new Response(JSON.stringify({ status: "success" }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
